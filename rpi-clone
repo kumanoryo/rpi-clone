@@ -442,8 +442,8 @@ START_TIME=$(date '+%H:%M:%S')
 sync
 echo "Starting the filesystem rsync to $DST_DISK"
 echo -n "(This may take several minutes)..."
-rsync "${RSYNC_OPTIONS}" --delete \
-		"${EXCLUDE_SWAPFILE}" \
+eval "rsync ${RSYNC_OPTIONS} --delete \
+		${EXCLUDE_SWAPFILE} \
 		--exclude '.gvfs' \
 		--exclude '/dev' \
 		--exclude '/media' \
@@ -454,7 +454,7 @@ rsync "${RSYNC_OPTIONS}" --delete \
 		--exclude '/tmp' \
 		--exclude 'lost\+found' \
 	// \
-	$CLONE
+	$CLONE"
 
 
 
