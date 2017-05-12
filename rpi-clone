@@ -140,7 +140,7 @@ then
 fi
 
 # Remove leading /dev/
-DIR=$(${$DST_DISK:1:5})
+DIR=${DST_DISK:1:5}
 if [ "$DIR" == "/dev/" ]
 then
 	DST_DISK=${DST_DISK#/dev/}
