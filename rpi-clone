@@ -316,7 +316,7 @@ then
 		PART2_START=$(parted /dev/mmcblk0 -ms unit MB p | grep "^2" \
 				| cut -f 2 -d: | sed s/MB// | tr "," "." | cut -f 1 -d.)
 		# and add some slop
-		DD_COUNT=$(( "${PART2_START}" + 8 ))
+		DD_COUNT=$((PART2_START+8))
 
 		echo ""
 		echo "Imaging the partition structure, copying $DD_COUNT megabytes..."
