@@ -66,11 +66,13 @@ fi
 usage()
 	{
 	echo ""
-	echo "usage: $PGM sdN {-f|--force-initialize} {-v|--verbose} {-x}"
+	echo "usage: $PGM sdN {-f|--force-initialize} {-v|--verbose} {-x} {-q|--quiet} {-r HOSTNAME|--replace-hostname=HOSTNAME}"
 	echo "    Example:  $PGM sda"
 	echo "    -v - list all files as they are copied."
 	echo "    -f - force initialize the destination partitions"
 	echo "    -x - use set -x for very verbose bash shell script debugging"
+	echo "    -q - quiet mode."
+	echo "    -r - replace hostname for clone raspi. (requirement HOSTNAME parameter)"
 	echo ""
 	echo "    Clone (rsync) a running Raspberry Pi file system to a destination"
 	echo "    SD card 'sdN' plugged into a Pi USB port (via a USB card reader)."
