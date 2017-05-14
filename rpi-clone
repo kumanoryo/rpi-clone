@@ -158,7 +158,6 @@ do
 			fi
 			;;
 	esac
-	shift
 done
 
 if [ "${#param}" -ne 1 ]
