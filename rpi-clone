@@ -429,6 +429,10 @@ echo "Clone destination disk   :  $DST_DISK"
 echo "Clone destination rootfs :  $DST_ROOT_PARTITION ($DST_ROOT_VOL_NAME) on ${CLONE}"
 echo "Clone destination bootfs :  $DST_BOOT_PARTITION on ${CLONE}/boot"
 echo "Verbose mode             :  $VERBOSE"
+if [ -n "${REPLACE_HOSTNAME}" ]
+then
+	echo "Replace hostname         :  ${REPLACE_HOSTNAME}"
+fi
 echo "==============================="
 
 
