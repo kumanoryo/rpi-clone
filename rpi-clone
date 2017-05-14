@@ -160,7 +160,7 @@ do
 	esac
 done
 
-if [ "${#param}" -ne 1 ]
+if [ "${#param[@]}" -ne 1 ]
 then
 	usage
 else
