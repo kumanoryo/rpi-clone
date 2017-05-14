@@ -559,6 +559,11 @@ echo "*** Done with clone to /dev/$DST_DISK ***"
 echo "    Started: $START_TIME    Finished: $STOP_TIME"
 echo ""
 
+if [ -n "${REPLACE_HOSTNAME}" ]
+then
+	sed -i -e "s/${HOSTNAME}/${REPLACE_HOSTNAME}/g" "${CLONE}/etc/hostname"
+	sed -i -e "s/${HOSTNAME}/${REPLACE_HOSTNAME}/g" "${CLONE}/etc/hosts"
+fi
 # Pause before unmounting in case I want to inspect the clone results
 # or need to custom modify any files on the destination SD clone.
 # Eg. modify $CLONE/etc/hostname, $CLONE/etc/network/interfaces, etc
