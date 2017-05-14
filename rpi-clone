@@ -561,6 +561,7 @@ echo ""
 
 if [ -n "${REPLACE_HOSTNAME}" ]
 then
+	echo "Replace host name ${HOSTNAME} to ${REPLACE_HOSTNAME}."
 	sed -i -e "s/${HOSTNAME}/${REPLACE_HOSTNAME}/g" "${CLONE}/etc/hostname"
 	sed -i -e "s/${HOSTNAME}/${REPLACE_HOSTNAME}/g" "${CLONE}/etc/hosts"
 fi
