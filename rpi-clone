@@ -103,6 +103,7 @@ usage()
 	}
 
 VERBOSE=off
+QUIET=off
 
 while [ "$1" ]
 do
@@ -116,6 +117,10 @@ do
 			;;
 		-x)
 			set -x
+			;;
+		-q)
+			QUIET=on
+			DST_DISK=sda
 			;;
 		-h|--help)
 			usage
@@ -163,8 +168,13 @@ then
 	echo "  may mean you have given a partition name instead of a disk name."
 	echo "  For example, if you want to clone to a disk sda,"
 	echo "  specify sda and not one of its partition names like sda1 or sda2."
-	echo -n "Do you want to continue anyway? (yes/no):"
-	read -r resp
+	if [ "${QUIET}" != "on" ]
+	then
+		echo -n "Do you want to continue anyway? (yes/no):"
+		read -r resp
+	else
+		resp="yes"
+	fi
 	if [ "$resp" != "y" ] && [ "$resp" != "yes" ]
 	then
 		echo ""
@@ -174,8 +184,13 @@ fi
 
 unmount_or_abort()
 	{
-	echo -n "Do you want to unmount $1? (yes/no): "
-	read -r resp
+	if [ "${QUIET}" != "on" ]
+	then
+		echo -n "Do you want to unmount $1? (yes/no): "
+		read -r resp
+	else
+		resp="yes"
+	fi
 	if [ "$resp" = "y" ] || [ "$resp" = "yes" ]
 	then
 		if ! umount "$1"
@@ -303,9 +318,13 @@ then
 
 	echo "*** All data on destination disk $DST_DISK will be overwritten! ***"
 	echo ""
-	echo -n "Do you want to initialize the destination disk /dev/$DST_DISK? (yes/no): "
-
-	read -r resp
+	if [ "${QUIET}" != "on" ]
+	then
+		echo -n "Do you want to initialize the destination disk /dev/$DST_DISK? (yes/no): "
+		read -r resp
+	else
+		resp="yes"
+	fi
 	if [ "$resp" = "y" ] || [ "$resp" = "yes" ]
 	then
 		# Image onto the destination disk a beginning fragment of the
@@ -349,7 +368,12 @@ then
 		echo ""
 		echo "Your booted /dev/mmcblk0p2 rootfs existing label: $SRC_ROOT_VOL_NAME"
 		echo -n "You may enter a label for the destination rootfs $DST_ROOT_PARTITION: "
-		read -r resp
+		if [ "${QUIET}" != "on" ]
+		then
+			read -r resp
+		else
+			resp=""
+		fi
 		if [ "$resp" != "" ]
 		then
 			e2label "${DST_ROOT_PARTITION}" "${resp}"
@@ -383,8 +407,13 @@ echo "==============================="
 # If this is an SD card initialization, can watch progress of the clone
 # in another terminal with:  watch df -h
 #
-echo -n "Final check, is it Ok to proceed with the clone (yes/no)?: "
-read -r resp
+if [ "${QUIET}" != "on" ]
+then
+	echo -n "Final check, is it Ok to proceed with the clone (yes/no)?: "
+	read -r resp
+else
+	resp="yes"
+fi
 if [ "$resp" != "y" ] && [ "$resp" != "yes" ]
 then
 	echo -e "Aborting the disk clone.\n"
@@ -507,9 +536,11 @@ echo ""
 # Eg. modify $CLONE/etc/hostname, $CLONE/etc/network/interfaces, etc
 # if I'm cloning into a card to be installed on another Pi.
 #
-echo -n "Hit Enter when ready to unmount the /dev/$DST_DISK partitions..."
-read -r resp
-
+if [ "${QUIET}" != "on" ]
+then
+	echo -n "Hit Enter when ready to unmount the /dev/$DST_DISK partitions..."
+	read -r resp
+fi
 echo "unmounting $CLONE/boot"
 umount $CLONE/boot
 
