@@ -99,49 +99,69 @@ usage()
 	echo "    when running $PGM."
 	echo ""
 	echo "    Version $VERSION"
-	exit 0
+	exit 1
 	}
 
 VERBOSE=off
 FORCE_INITIALIZE=false
 QUIET=off
 
-while [ "$1" ]
+for OPT in "$@"
 do
-	case "$1" in
-		-v|--verbose)
+	case "$OPT" in
+		'-v'|'--verbose' )
 			VERBOSE=on
 			RSYNC_OPTIONS=${RSYNC_OPTIONS}v
+			shift 1
 			;;
-		-f|--force-initialize)
+		'-f'|'--force-initialize' )
 			FORCE_INITIALIZE=true
+			shift 1
 			;;
-		-x)
+		'-x' )
 			set -x
+			shift 1
 			;;
-		-q|--quiet)
+		'-q'|'--quiet' )
 			QUIET=on
+			shift 1
 			;;
-		-h|--help)
+		'-r'|'--replace-hostname=' )
+			if [ -z "$2" ] || [[ "$2" =~ ^-+ ]]
+			then
+				echo "${PGM}: Option requires an argument -- $1" 1>&2
+				exit 1
+			fi
+			REPLACE_HOSTNAME="$2"	
+			shift 2
+			;;
+		'-h'|'--help' )
 			usage
 			;;
+		'--'|'-' )
+			shift 1
+			param+=( "$@" )
+			break
+			;;
+		-*)
+			illegal_option="$1"
+			echo "${PGM}: Illegal option -- ${illegal_option//^-+//}" 1>&2
+			exit 1
+			;;
 		*)
-			if [ "$DST_DISK" != "" ]
+			if [ ! -z "$1" ] && [[ ! "$1" =~ ^-+ ]]
 			then
-				echo "Bad args"
-				usage
+				param+=( "$1" )
+				shift 1
 			fi
-			DST_DISK=$1
 			;;
 	esac
 	shift
 done
 
-
 if [ "$DST_DISK" = "" ]
 then
 	usage
-	exit 0
 fi
 
 # Remove leading /dev/
