@@ -159,6 +159,13 @@ do
 	shift
 done
 
+if [ "${#param}" -ne 1 ]
+then
+	usage
+else
+	DST_DISK="${param[0]}"
+fi
+
 if [ "$DST_DISK" = "" ]
 then
 	usage
